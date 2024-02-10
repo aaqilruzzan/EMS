@@ -7,10 +7,8 @@ import {
   deleteEmployee,
   totalsalary,
   empcount,
-  register,
-  getUsers,
-  login,
 } from "../controllers/employees";
+import { register, login, getUsers } from "../controllers/users";
 
 const router: Router = Router();
 

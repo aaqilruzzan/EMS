@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { client } from "../../app";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const register = async (req: Request, res: Response) => {
   try {
@@ -11,9 +12,21 @@ const register = async (req: Request, res: Response) => {
       "INSERT INTO users (name, email, password) VALUES ($1, $2, $3)",
       [name, email, hashedPassword]
     );
-    res.status(201).json({
-      message: "User Added Successfully",
-    });
+
+    if (process.env.JWT_SECRET != undefined) {
+      const token = jwt.sign({ role: "admin" }, process.env.JWT_SECRET, {
+        expiresIn: "1d",
+      });
+
+      res.status(201).json({
+        message: "User Added Successfully",
+        token,
+      });
+    } else {
+      res.status(500).json({
+        message: "Internal Server Error",
+      });
+    }
   } catch (error) {
     console.error("Error creating employee:", error as any);
 

@@ -15,15 +15,27 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.login = exports.getUsers = exports.register = exports.empcount = exports.totalsalary = exports.deleteEmployee = exports.updateEmployee = exports.getEmployeeById = exports.getEmployees = exports.createEmployee = void 0;
 const app_1 = require("../../app");
 const bcrypt_1 = __importDefault(require("bcrypt"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { name, email, password } = req.body;
         const salt = yield bcrypt_1.default.genSalt(10);
         const hashedPassword = yield bcrypt_1.default.hash(password, salt);
         const response = yield app_1.client.query("INSERT INTO users (name, email, password) VALUES ($1, $2, $3)", [name, email, hashedPassword]);
-        res.status(201).json({
-            message: "User Added Successfully",
-        });
+        if (process.env.JWT_SECRET != undefined) {
+            const token = jsonwebtoken_1.default.sign({ role: "admin" }, process.env.JWT_SECRET, {
+                expiresIn: "1d",
+            });
+            res.status(201).json({
+                message: "User Added Successfully",
+                token,
+            });
+        }
+        else {
+            res.status(500).json({
+                message: "Internal Server Error",
+            });
+        }
     }
     catch (error) {
         console.error("Error creating employee:", error);

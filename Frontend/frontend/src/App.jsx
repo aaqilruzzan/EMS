@@ -1,7 +1,12 @@
-import SignUp from "./components/SignUp";
+import Dashbaord from "./components/dashboard";
+import SignUp from "./pages/SignUp";
 
 function App() {
-  return <></>;
+  return (
+    <>
+      <Dashbaord />
+    </>
+  );
 }
 
 export default App;

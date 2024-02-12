@@ -10,7 +10,7 @@ dotenv.config();
 const app: Application = express();
 app.use(
   cors({
-    origin: "http://localhost:5175",
+    origin: "http://localhost:5173",
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   })
 );

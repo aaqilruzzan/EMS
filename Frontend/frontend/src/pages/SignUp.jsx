@@ -13,6 +13,9 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import axios from "axios";
+import { BACKEND_URL } from "../constants/common";
+import { useNavigate } from "react-router-dom";
 
 function Copyright(props) {
   return (
@@ -41,6 +44,27 @@ export default function SignUp() {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  const registerUser = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(`${BACKEND_URL}/register`, {
+        name: firstName + " " + lastName,
+        email: email,
+        password: password,
+      });
+      if (response.status === 201) {
+        alert("user registered successfully");
+        navigate("/");
+      } else {
+        alert("user registration failed");
+      }
+    } catch (error) {
+      alert(error.response.data.message);
+      console.error(error);
+    }
+  };
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -61,12 +85,7 @@ export default function SignUp() {
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
-          <Box
-            component="form"
-            noValidate
-            onSubmit={handleSubmit}
-            sx={{ mt: 3 }}
-          >
+          <Box component="form" noValidate sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -128,12 +147,21 @@ export default function SignUp() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              onClick={registerUser}
+              disabled={!firstName || !lastName || !email || !password}
             >
               Sign Up
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link
+                  href="#"
+                  variant="body2"
+                  onClick={(e) => {
+                    e.preventDefault(); // Prevent default link behavior
+                    navigate("/login"); // Navigate programmatically
+                  }}
+                >
                   Already have an account? Sign in
                 </Link>
               </Grid>

@@ -142,7 +142,7 @@ const totalsalary = async (req: Request, res: Response) => {
       });
     }
 
-    res.status(200).json(response.rows);
+    res.status(200).json(response.rows[0]);
   } catch (error) {
     console.error("Error getting employees:", error as any);
     res.status(500).json({
@@ -152,11 +152,9 @@ const totalsalary = async (req: Request, res: Response) => {
   }
 };
 
-const empcount = async (req: Request, res: Response) => {
+const getempcount = async (req: Request, res: Response) => {
   try {
-    const response = await client.query(
-      "SELECT COUNT(emp_id) AS employee_count FROM employee"
-    );
+    const response = await client.query("SELECT COUNT(emp_id) FROM employee");
 
     if (response.rows.length === 0) {
       // If no records found, return a specific message or status code
@@ -165,7 +163,7 @@ const empcount = async (req: Request, res: Response) => {
       });
     }
 
-    res.status(200).json(response.rows);
+    res.status(200).json(response.rows[0]);
   } catch (error) {
     console.error("Error getting employees:", error as any);
     res.status(500).json({
@@ -182,5 +180,5 @@ export {
   updateEmployee,
   deleteEmployee,
   totalsalary,
-  empcount,
+  getempcount,
 };

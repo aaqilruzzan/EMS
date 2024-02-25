@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUsers = exports.login = exports.register = void 0;
+exports.getUserCount = exports.getUsers = exports.login = exports.register = void 0;
 const app_1 = require("../../app");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
@@ -116,3 +116,23 @@ const getUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.getUsers = getUsers;
+const getUserCount = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const response = yield app_1.client.query("SELECT COUNT(*) FROM users");
+        if (response.rows.length === 0) {
+            // If no records found, return a specific message or status code
+            return res.status(404).json({
+                message: "No user records found.",
+            });
+        }
+        res.status(200).json(response.rows[0]);
+    }
+    catch (error) {
+        console.error("Error getting user count:", error);
+        res.status(500).json({
+            message: "Internal Server Error",
+            error: error.message,
+        });
+    }
+});
+exports.getUserCount = getUserCount;

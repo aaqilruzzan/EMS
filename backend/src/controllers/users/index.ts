@@ -108,4 +108,25 @@ const getUsers = async (req: Request, res: Response) => {
   }
 };
 
-export { register, login, getUsers };
+const getUserCount = async (req: Request, res: Response) => {
+  try {
+    const response = await client.query("SELECT COUNT(*) FROM users");
+
+    if (response.rows.length === 0) {
+      // If no records found, return a specific message or status code
+      return res.status(404).json({
+        message: "No user records found.",
+      });
+    }
+
+    res.status(200).json(response.rows[0]);
+  } catch (error) {
+    console.error("Error getting user count:", error as any);
+    res.status(500).json({
+      message: "Internal Server Error",
+      error: (error as any).message,
+    });
+  }
+};
+
+export { register, login, getUsers, getUserCount };

@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.empcount = exports.totalsalary = exports.deleteEmployee = exports.updateEmployee = exports.getEmployeeById = exports.getEmployees = exports.createEmployee = void 0;
+exports.getempcount = exports.totalsalary = exports.deleteEmployee = exports.updateEmployee = exports.getEmployeeById = exports.getEmployees = exports.createEmployee = void 0;
 const app_1 = require("../../app");
 const createEmployee = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, email, salary, address } = req.body;
@@ -135,7 +135,7 @@ const totalsalary = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                 message: "No employee records found.",
             });
         }
-        res.status(200).json(response.rows);
+        res.status(200).json(response.rows[0]);
     }
     catch (error) {
         console.error("Error getting employees:", error);
@@ -146,16 +146,16 @@ const totalsalary = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.totalsalary = totalsalary;
-const empcount = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getempcount = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const response = yield app_1.client.query("SELECT COUNT(emp_id) AS employee_count FROM employee");
+        const response = yield app_1.client.query("SELECT COUNT(emp_id) FROM employee");
         if (response.rows.length === 0) {
             // If no records found, return a specific message or status code
             return res.status(404).json({
                 message: "No employee records found.",
             });
         }
-        res.status(200).json(response.rows);
+        res.status(200).json(response.rows[0]);
     }
     catch (error) {
         console.error("Error getting employees:", error);
@@ -165,4 +165,4 @@ const empcount = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         });
     }
 });
-exports.empcount = empcount;
+exports.getempcount = getempcount;

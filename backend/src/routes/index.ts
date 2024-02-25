@@ -6,9 +6,9 @@ import {
   updateEmployee,
   deleteEmployee,
   totalsalary,
-  empcount,
+  getempcount,
 } from "../controllers/employees";
-import { register, login, getUsers } from "../controllers/users";
+import { register, login, getUsers, getUserCount } from "../controllers/users";
 
 const router: Router = Router();
 
@@ -19,7 +19,8 @@ router.get("/getemps", getEmployees);
 router.get("/getusers", getUsers);
 router.get("/getempbyid/:id", getEmployeeById);
 router.get("/totalsalary", totalsalary);
-router.get("/empcount", empcount);
+router.get("/getempcount", getempcount);
+router.get("/getusercount", getUserCount);
 router.put("/updateemp/:id", updateEmployee);
 router.delete("/deleteemp/:id", deleteEmployee);
 
